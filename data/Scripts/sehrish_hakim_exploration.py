@@ -26,19 +26,37 @@ length_year.info()
 length_year_month.info()
 
 #Sorting the dataframes by year for comparison and analysis as the years are given randomly in the dataset 
+#Taken from Slides: DHFAS-13.1-Dataframes and Pandas
 lengths_sorted = lengths.sort_values(by=['year', 'month', 'day'])
 length_year_sorted = length_year.sort_values(by='year')
 length_year_month_sorted = length_year_month.sort_values(by=['year', 'month'])
 
 
-
-
-
 #print the sorted version for analysing data
 print("Sorted Dataframe:")
+
 print(lengths_sorted)
 print(length_year_sorted)
-print(length_year_month_sorted )
+print(length_year_month_sorted)
+
+
+#Show summary statistics for the 'length' column to understand distribution of article lengths
+#Taken from ChatGpt : Conversation 2 
+print("\nDescription of 'lengths_sorted' DataFrame:")## Prints a header to label the upcoming output for clarity
+
+# Calculates and shows count, average, middle, and spread values to summarize 'length' data
+print(lengths_sorted['length'].describe())
+
+
+#Display statistics for total and average article lengths per year
+print("\nDescription of 'length_year_sorted' DataFrame:")
+print(length_year_sorted[['length-sum', 'length-mean']].describe())
+
+#Provide summary statistics for total and average article lengths per year-month
+print("\nDescription of 'length_year_month_sorted' DataFrame:")
+print(length_year_month_sorted[['length-sum', 'length-mean']].describe())
+
+
 
 
 
