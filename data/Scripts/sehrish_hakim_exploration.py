@@ -58,10 +58,39 @@ print(length_year_month_sorted[['length-sum', 'length-mean']].describe())
 
 
 
+# Display entries from 2017 in the daily level data # Taken from Slide 30 -DHFAS-13.1-Dataframes and Pandas
+# Helps check if 2017 has enough data to be meaningful or should be removed
+print(lengths_sorted[lengths_sorted['year'] == 2017])
+
+# Display 2017 row in the yearly summary DataFrame
+# Allows you to inspect total and average article length for 2017 to assess consistency
+print(length_year_sorted[length_year_sorted['year'] == 2017])
+
+# Display 2017 entries in the monthly summary DataFrame
+# Reveals how many months (if any) have data from 2017 and how much they contribute
+print(length_year_month_sorted[length_year_month_sorted['year'] == 2017])
 
 
 
+#Define the list of valid years we want to keep in our dataset with consistent and meaningful data
+# Taken from slide 31 : DHFAS-13.1-Dataframes and Pandas and Conversation 
+valid_years = [2021, 2022, 2023, 2024]
 
+# Filter lengths_sorted to keep only rows from the valid years
+lengths_sorted = lengths_sorted[lengths_sorted['year'].isin(valid_years)]
+
+# Filter length_year_sorted to include only valid years
+
+length_year_sorted = length_year_sorted[length_year_sorted['year'].isin(valid_years)]
+
+#Filter length_year_month_sorted to include only valid years
+
+length_year_month_sorted = length_year_month_sorted[length_year_month_sorted['year'].isin(valid_years)]
+
+#Print the dataframe to check the updated dataframes
+print(lengths_sorted)
+print(length_year_sorted)
+print(length_year_month_sorted)
 
 
 
