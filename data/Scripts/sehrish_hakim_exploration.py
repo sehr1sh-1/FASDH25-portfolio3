@@ -42,7 +42,7 @@ print(length_year_month_sorted)
 
 #Show summary statistics for the 'length' column to understand distribution of article lengths
 #Taken from ChatGpt : Conversation 2 
-print("\nDescription of 'lengths_sorted' DataFrame:")## Prints a header to label the upcoming output for clarity
+print("\nDescription of 'lengths_sorted' DataFrame:")#Prints a header to label the upcoming output for clarity
 
 #Calculates and shows count, average, middle, and spread values to summarize 'length' data
 print(lengths_sorted['length'].describe())
@@ -149,7 +149,7 @@ fig_length_bar = px.bar(
 
 #Display the graph
 #fig_length_bar.show()
-fig_length_bar.write_html("../Outputs/number_of_articles_per_day.html")
+fig_length_bar.write_html("../Outputs/number_of_articles_per_day_bar.html")
 
 
 #Average article length per year 
@@ -168,7 +168,7 @@ fig_year_bar = px.bar(
 
 #fig_year_bar.show()
 
-fig_year_bar.write_html("../Outputs/number_of_articles_per_year.html")
+fig_year_bar.write_html("../Outputs/number_of_articles_per_year_bar.html")
 
 #Monthly average article length by year 
 
@@ -185,7 +185,7 @@ fig_monthly_bar = px.bar(
 )
 
 #fig_monthly_bar.show()
-fig_monthly_bar.write_html("../Outputs/number_of_articles_per_month.html")
+fig_monthly_bar.write_html("../Outputs/number_of_articles_per_month_bar.html")
 
 ##Scatter Plots
 
@@ -206,7 +206,7 @@ fig_scatter_daily = px.scatter(
     template='plotly_dark'  # Dark theme for better visual contrast
 )
 #fig_scatter_daily.show()
-fig_scatter_daily.write_html("../Outputs/daily_article_lengths.html")
+fig_scatter_daily.write_html("../Outputs/daily_article_lengths_scatter.html")
 
 #Yearly Average Article Lengths
 
@@ -219,7 +219,7 @@ fig_scatter_yearly = px.scatter(
     template='plotly_dark'  #Consistent dark styling
 )
 #fig_scatter_yearly.show()
-fig_scatter_yearly.write_html("../Outputs/yearly_article_lengths.html")
+fig_scatter_yearly.write_html("../Outputs/yearly_article_lengths_scatter.html")
 #Monthly Average Article Lengths
 
 fig_scatter_monthly = px.scatter(
@@ -232,7 +232,7 @@ fig_scatter_monthly = px.scatter(
     template='plotly_dark'  #Maintain dark theme consistency
 )
 #fig_scatter_monthly.show()
-fig_scatter_monthly.write_html("../Outputs/monthly_article_lengths.html")
+fig_scatter_monthly.write_html("../Outputs/monthly_article_lengths_scatter.html")
 
 ##Histograms
 #Taken from slide 15: DHFAS-13.2-Plotly and Visualisation
@@ -274,7 +274,7 @@ fig_daily_hist.add_annotation(
 )
 
 #fig_daily_hist.show()
-fig_daily_hist.write_html("../Outputs/daily_article_length.html")
+fig_daily_hist.write_html("../Outputs/daily_article_length_hist.html")
 
 
 #Yearly average article lengths (one bar per year)
@@ -304,7 +304,7 @@ fig_yearly_hist.add_annotation(
 
 #Show the finalized histogram 
 #fig_yearly_hist.show()
-fig_yearly_hist.write_html("../Outputs/yearly_article_length.html")
+fig_yearly_hist.write_html("../Outputs/yearly_article_length_hist.html")
 
 
 #Monthly average article lengths, colored by year
@@ -335,7 +335,7 @@ fig_monthly_hist.add_annotation(
 
 #Display the final monthly histogram
 #fig_monthly_hist.show()
-fig_monthly_hist.write_html("../Outputs/monthly_article_length.html")
+fig_monthly_hist.write_html("../Outputs/monthly_article_length_hist.html")
 
 ##Line Graphs
 #Taken from Collab Cheatsheet plotly_cheatsheet_4_1.ipynb and Slide: 15 DHFAS-13.2
@@ -364,7 +364,7 @@ fig_line_daily = px.line(
 
 # Display the chart
 #fig_line_daily.show()
-fig_line_daily.write_html("../Outputs/daily_avg_article_length.html")
+fig_line_daily.write_html("../Outputs/daily_avg_article_length_line.html")
 
 
 #Yearly average lengths 
@@ -383,7 +383,7 @@ fig_line_year = px.line(
 
 #Show the line chart for yearly averages
 #fig_line_year.show()
-fig_line_year.write_html("../Outputs/yearly_avg_article_length.html")
+fig_line_year.write_html("../Outputs/yearly_avg_article_length_line.html")
 
 
 #Monthly Avergae article lengths over time 
@@ -411,7 +411,7 @@ fig_line_month.update_layout(xaxis_tickangle=-45)
 
 #Display the monthly line chart
 #fig_line_month.show()
-fig_line_month.write_html("../Outputs/monthly_avg_article_length.html")
+fig_line_month.write_html("../Outputs/monthly_avg_article_length_line.html")
 
 
 ##Tree map Graphs
