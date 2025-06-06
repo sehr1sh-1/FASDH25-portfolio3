@@ -2,7 +2,7 @@
 import pandas as pd
 import plotly.express as px
 
-# Read the CSV file into a pandas DataFrame
+#Read the CSV file into a pandas DataFrame
 
 lengths = pd.read_csv("../dataframes/length/length.csv")
 
@@ -44,7 +44,7 @@ print(length_year_month_sorted)
 #Taken from ChatGpt : Conversation 2 
 print("\nDescription of 'lengths_sorted' DataFrame:")## Prints a header to label the upcoming output for clarity
 
-# Calculates and shows count, average, middle, and spread values to summarize 'length' data
+#Calculates and shows count, average, middle, and spread values to summarize 'length' data
 print(lengths_sorted['length'].describe())
 
 
@@ -58,29 +58,28 @@ print(length_year_month_sorted[['length-sum', 'length-mean']].describe())
 
 
 
-# Display entries from 2017 in the daily level data # Taken from Slide 30 -DHFAS-13.1-Dataframes and Pandas
-# Helps check if 2017 has enough data to be meaningful or should be removed
+#Display entries from 2017 in the daily level data # Taken from Slide 30 -DHFAS-13.1-Dataframes and Pandas
+#Helps check if 2017 has enough data to be meaningful or should be removed
 print(lengths_sorted[lengths_sorted['year'] == 2017])
 
-# Display 2017 row in the yearly summary DataFrame
-# Allows you to inspect total and average article length for 2017 to assess consistency
+#Display 2017 row in the yearly summary DataFrame
+#Allows you to inspect total and average article length for 2017 to assess consistency
 print(length_year_sorted[length_year_sorted['year'] == 2017])
 
-# Display 2017 entries in the monthly summary DataFrame
-# Reveals how many months (if any) have data from 2017 and how much they contribute
+#Display 2017 entries in the monthly summary DataFrame
+#Reveals how many months (if any) have data from 2017 and how much they contribute
 print(length_year_month_sorted[length_year_month_sorted['year'] == 2017])
 
 
 
 #Define the list of valid years we want to keep in our dataset with consistent and meaningful data
-# Taken from slide 31 : DHFAS-13.1-Dataframes and Pandas and Conversation 
+#Taken from slide 31 : DHFAS-13.1-Dataframes and Pandas and Conversation 
 valid_years = [2021, 2022, 2023, 2024]
 
 # Filter lengths_sorted to keep only rows from the valid years
 lengths_sorted = lengths_sorted[lengths_sorted['year'].isin(valid_years)]
 
 # Filter length_year_sorted to include only valid years
-
 length_year_sorted = length_year_sorted[length_year_sorted['year'].isin(valid_years)]
 
 #Filter length_year_month_sorted to include only valid years
@@ -98,364 +97,373 @@ print(length_year_month_sorted)
 fig_length_box = px.box(lengths_sorted,
              x="year",
              y="length",
-             title="Distribution of Individual Article Lengths by Year")
+             title="Distribution of Individual Article Lengths by Year",
+             )
+
 #Displays the plot
 fig_length_box.show()
+fig_length.write_html("output/boxplot_article_lengths_by_day.html")
 
 #This graph shows the average article length for each year and whether some years had more variation than others
-fig_year_box = px.box(length_year_sorted, y="length-mean", title="Distribution of Yearly Average Article Lengths")
+fig_year_box = px.box(length_year_sorted,
+                      y="length-mean",
+                      title="Distribution of Yearly Average Article Lengths",
+                       )          
 fig_year_box.show()
+fig_year_box.write_html("output/boxplot_article_lengths_by_year.html")
 
 # This graph compares monthly averages for each year, so we can see which years had longer or shorter articles overall
-fig_monthly_box = px.box(length_year_month_sorted, x="year", y="length-mean", title="Distribution of Monthly Average Article Lengths by Year")
+fig_monthly_box = px.box(length_year_month_sorted,
+                         x="year",
+                         y="length-mean",
+                         title="Distribution of Monthly Average Article Lengths by Year",
+                         )
 
 fig_monthly_box.show()
+fig_monthly_box.write_html("output/boxplot_article_lengths_by_month.html")
 
+##Bar Graphs
 
-#Bar Graphs
 #Taken from slide no 10: DHFAS-13.2-Plotly and Visualisation and collab cheat sheet 
 
-#Count how many articles fall into each month (1–12)
-month_counts = lengths_sorted['month'].value_counts().sort_index()  # Ensures chronological month order
+#Article length per day in from 2021 to 2024
+#Count how many articles appear in each month (across all years)
 
-#Create bar chart of article counts per month
+month_counts_df = lengths_sorted['month'].value_counts().sort_index().reset_index()
+
+#Rename columns for clarity in plotting
+month_counts_df.columns = ['month', 'count']
+
+#Create a bar chart showing article count per month
 fig_length_bar = px.bar(
-    x=month_counts.index,  #X-axis is month number
-    y=month_counts.values,  #Y-axis is article count
-    labels={'x': 'Month', 'y': 'Number of Articles'},  #Axis labels for clarity
-    title='Number of Articles per Month'  #Title for plot context
+    month_counts_df,
+    x='month',
+    y='count',
+    title='Number of Articles per Month',  
+    labels={'count': 'Number of Articles', 'month': 'Month'}, 
+    color='count',                          #Color intensity reflects article count
+    
 )
 
-#Set X-axis ticks inside for visual alignment 
-fig_length_bar.update_xaxes(
-    ticks="inside",  #Main ticks inside the axis line
-    tickwidth=2,  #Thickness of tick lines
-    minor_ticks="inside",  #Minor ticks inside as well
-    minor_tickwidth=2,  #Width of minor tick lines
-    tickvals=list(range(1, 13))  #Explicit ticks for months 1–12
-)
-
-#Set Y-axis ticks outside for contrast 
-fig_length_bar.update_yaxes(
-    ticks="outside",  #Main ticks outside the axis line
-    tickwidth=2,  #Tick thickness
-    minor_ticks="outside",  #Minor ticks outside as well
-    minor_tickwidth=2  #Width of minor tick lines
-)
-
-#Show values above bars to improve readability 
-fig_length_bar.update_traces(
-    text=month_counts.values,  #Use article counts as labels
-    textposition='outside'  #Position labels above bars
-)
-
-fig_length_bar.show() 
+#Display the graph
+fig_length_bar.show()
 
 
-#Bar chart to show how average article length has changed across years
+
+#Average article length per year 
+
+#Create a bar chart showing how average article length has changed yearly
 fig_year_bar = px.bar(
-    x=length_year_sorted['year'],
-    y=length_year_sorted['length-mean'],
-    labels={'y': 'Average Length (tokens)'},
-    title='Average Article Length per Year'
+    length_year_sorted,
+    x='year',
+    y='length-mean',
+    title='Average Article Length per Year',  
+    labels={'length-mean': 'Average Length (tokens)', 'year': 'Year'},  
+    color='length-mean',#Color intensity shows average length
+   
 )
 
-#Same axis tick styling as before (see first chart)
-fig_year_bar.update_xaxes(
-    ticks="inside",
-    tickwidth=2,
-    minor_ticks="inside",
-    minor_tickwidth=2
-)
-
-fig_year_bar.update_yaxes(
-    ticks="outside",
-    tickwidth=2,
-    minor_ticks="outside",
-    minor_tickwidth=2
-)
-
-#Show rounded average lengths above bars for easy comparison
-fig_year_bar.update_traces(
-    text=length_year_sorted['length-mean'].round(0),
-    textposition='outside'
-)
 
 fig_year_bar.show()
 
 
-# Group data by year and month to compute monthly average article lengths per year
-monthly_grouped = length_year_month_sorted.groupby(['year', 'month'])['length-mean'].mean().reset_index()
 
-# Bar chart comparing monthly average article lengths across years
+#Monthly average article length by year 
+
+#Create grouped bar chart: each year is a different color group
+#Shows how average article length changes per month, across years
 fig_monthly_bar = px.bar(
-    monthly_grouped,
+    length_year_month_sorted,
     x='month',
     y='length-mean',
-    color='year',  # Color distinguishes years for comparison
-    barmode='group',  # Group bars side-by-side for clarity
-    title='Monthly Average Article Length by Year'
+    color='year',              #Group bars by year
+    barmode='group',           #Display bars side by side
+    title='Monthly Average Article Length by Year',
+    labels={'length-mean': 'Average Length (tokens)', 'month': 'Month'}
 )
 
-# Repeated axis styling (already explained above)
-fig_monthly_bar.update_xaxes(
-    ticks="inside",
-    tickwidth=2,
-    minor_ticks="inside",
-    minor_tickwidth=2,
-    tickvals=list(range(1, 13))
-)
-
-fig_monthly_bar.update_yaxes(
-    ticks="outside",
-    tickwidth=2,
-    minor_ticks="outside",
-    minor_tickwidth=2
-)
 
 fig_monthly_bar.show()
 
-#Scatter Plots
 
+##Scatter Plots
+
+#Solution from Coolab Cheatsheet: plotly_cheatsheet_5_2.ipynb
 
 #Explore how article lengths vary over time using scatter plots
-# Scatter plot for individual article lengths
+
+#Individual Article Lengths Over Time (Daily)
+#Combine 'year', 'month', and 'day' columns into a single datetime column for precise daily plotting
+lengths_sorted['date'] = pd.to_datetime(lengths_sorted[['year', 'month', 'day']])
+
 fig_scatter_daily = px.scatter(
     lengths_sorted,
-    x="year",
-    y="length",
-    title="Scatter Plot of Individual Article Lengths by Year"
+    x='date',  # Use exact date for daily granularity (more detailed than just 'year')
+    y='length',  # Article length in tokens
+    title="Daily Article Lengths Over Time (2021-2024)",
+    labels={'length': 'Article Length', 'date': 'Date'},  # Clear axis labels
+    template='plotly_dark'  # Dark theme for better visual contrast
 )
 fig_scatter_daily.show()
 
-# Scatter plot for yearly average article lengths
+#Yearly Average Article Lengths
+
 fig_scatter_yearly = px.scatter(
     length_year_sorted,
-    x="year",
-    y="length-mean",
-    title="Scatter Plot of Yearly Average Article Lengths"
+    x='year',  #Year on x-axis
+    y='length-mean',  #Average length of articles that year
+    title="Yearly Average Article Lengths",
+    labels={'length-mean': 'Average Length', 'year': 'Year'},  #Axis labels for clarity
+    template='plotly_dark'  #Consistent dark styling
 )
 fig_scatter_yearly.show()
 
-# Scatter plot for monthly average article lengths
+#Monthly Average Article Lengths
+
 fig_scatter_monthly = px.scatter(
     length_year_month_sorted,
-    x="month",
-    y="length-mean",
-    color="year",  # Differentiate years using color
-    title="Scatter Plot of Monthly Average Article Lengths by Year"
+    x='month',    #Month number (1-12)
+    y='length-mean',  #Average article length per month
+    color='year',  #Color code points by year for comparison
+    title="Monthly Average Article Lengths (2021-2024)",
+    labels={'length-mean': 'Average Length', 'month': 'Month'},  #Axis labels for clarity
+    template='plotly_dark'  #Maintain dark theme consistency
 )
 fig_scatter_monthly.show()
 
 
-#Histogram
+
+##Histograms
 #Taken from slide 15: DHFAS-13.2-Plotly and Visualisation
-# Histogram of individual article lengths colored by year for daily data
+
+
+
+#Create a histogram of individual article lengths from daily-level data,with bars color-coded by publication year to allow year-wise comparison.
 fig_daily_hist = px.histogram(
-    lengths_sorted,
-    x="length",
-    color="year",  # Color bars by publication year for easy comparison across years
+    lengths_sorted, #DataFrame containing individual article lengths
+    x="length",  #x-axis shows article length (in tokens)
+    color="year",   #Colors indicate publication year for comparative analysis
     title="Article Lengths in the Gaza Corpus (Daily Data)",
-    labels={"length": "Length in tokens", "year": "Year of Publication"}  # Clear axis and legend labels
+    labels={"length": "Length in tokens", "year": "Year of Publication"}  #Custom axis and legend labels
 )
 
-#Highlight a notable second peak in the distribution with an annotation arrow
+# Add an annotation to draw attention to a secondary peak in the distribution,indicating a different writing pattern or format in some articles.
 fig_daily_hist.add_annotation(
-    x=150, y=260,  # Position of the arrow tip on the plot (adjust to fit your data)
-    ax=60, ay=-20,  # Offset of the arrow base from the tip for better visibility
-    text="Second peak",  # Annotation text
-    showarrow=True,
-    arrowhead=1,
-    bgcolor="white"  # Background color for annotation text for readability
+    x=150, y=260,              #Coordinates for the arrow tip near the second peak
+    ax=60, ay=-20,             #Arrow base offset to make the annotation more readable
+    text="Second peak",        #Label text for the annotation
+    showarrow=True,            #Display the arrow pointing to the feature
+    arrowhead=1,               #Arrow style
+    bgcolor="white"            #White background ensures label is visible over the plot
 )
 
-#Calculate mean article length from daily data to indicate central tendency
+#Compute the overall mean length of articles to show the central tendency of the data.
 mean_length_daily = lengths_sorted["length"].mean()
 
-#Add a vertical dashed line on the histogram at the mean length
+#Add a vertical dashed line to mark the mean length, making it easy to compare the average with the distribution's spread.
 fig_daily_hist.add_vline(x=mean_length_daily, line_dash="dash")
 
-#Label the mean line for clarity
+#Add a label to the mean line so viewers know what the dashed line represents.
 fig_daily_hist.add_annotation(
     x=mean_length_daily,
-    y=320,  # Y position for annotation label (adjust based on plot scale)
-    xshift=50,  # Shift label slightly right from the line to avoid overlap
-    showarrow=False,
+    y=320,                     #Y-position places label clearly above data bars
+    xshift=50,                 #Slight horizontal offset to avoid overlapping with the line
+    showarrow=False,           #No arrow needed—just a static label
     text="Mean length"
 )
 
-#Display the completed daily histogram with annotations
 fig_daily_hist.show()
 
 
-#Histogram of yearly average article lengths (no color since year is categorical x-axis)
+#Yearly average article lengths (one bar per year)
+
+#Create a histogram of yearly average article lengths (no color needed since x-axis is time-aggregated).
 fig_yearly_hist = px.histogram(
-    length_year_sorted,
-    x="length-mean",
+    length_year_sorted,              #DataFrame with one row per year
+    x="length-mean",                 #x-axis represents average article length per year
     title="Yearly Average Article Lengths in the Gaza Corpus",
-    labels={"length-mean": "Average Length (tokens)"}
+    labels={"length-mean": "Average Length (tokens)"}  #Label for clarity
 )
 
-#Compute the mean of yearly average lengths for reference line
+#Calculate the mean of these yearly averages to understand overall trends over time.
 mean_length_yearly = length_year_sorted["length-mean"].mean()
 
-#Add vertical dashed line at the mean yearly average length
+#Add a dashed line to indicate the global mean across years.
 fig_yearly_hist.add_vline(x=mean_length_yearly, line_dash="dash")
 
-#Label the mean line on the yearly histogram
+#Annotate this line to help viewers immediately recognize its significance.
 fig_yearly_hist.add_annotation(
     x=mean_length_yearly,
-    y=5,  # Y position for annotation label, adjust if necessary
+    y=5,                          #Adjust y to position label above the bars
     xshift=50,
     showarrow=False,
     text="Mean yearly average length"
 )
 
-#Show the yearly average length histogram with mean line and label
+#Show the finalized histogram 
 fig_yearly_hist.show()
 
 
-#Histogram of monthly average article lengths colored by year for comparison
+#Monthly average article lengths, colored by year
+
+#Plot a histogram of average article lengths per month,color-coded by year to enable cross-year pattern analysis.
 fig_monthly_hist = px.histogram(
-    length_year_month_sorted,
-    x="length-mean",
-    color="year",  # Color bars by year to compare monthly averages across years
+    length_year_month_sorted,       #DataFrame with monthly aggregated article lengths
+    x="length-mean",                #x-axis shows average article length
+    color="year",                   #Color coding highlights changes in monthly trends across years
     title="Monthly Average Article Lengths by Year",
     labels={"length-mean": "Average Length (tokens)", "year": "Year"}
 )
 
-#Calculate mean monthly average length for reference line
+#Compute the mean across all monthly averages to show general central tendency over time.
 mean_length_monthly = length_year_month_sorted["length-mean"].mean()
 
-#Add vertical dashed line at the mean monthly average length
+#Add a vertical dashed line at this mean to visually anchor comparisons.
 fig_monthly_hist.add_vline(x=mean_length_monthly, line_dash="dash")
 
-#Label the mean line on the monthly histogram
+#Add an annotation to clarify the line's meaning without cluttering the plot.
 fig_monthly_hist.add_annotation(
     x=mean_length_monthly,
-    y=10,  # Y position for label (adjust based on plot)
+    y=10,                        #Y-position of the label for visibility
     xshift=50,
     showarrow=False,
     text="Mean monthly average length"
 )
 
-#Display the monthly histogram with color coding and mean line
+#Display the final monthly histogram
 fig_monthly_hist.show()
 
 
-#Line Graphs
+##Line Graphs
 #Taken from Collab Cheatsheet plotly_cheatsheet_4_1.ipynb and Slide: 15 DHFAS-13.2
 
 
-#Line chart of individual article lengths over time (daily data)
+
+#Daily average article lengths overtime 
+
+#Convert 'year', 'month', and 'day' columns into a single datetime column for precise plotting of trends over time with daily granularity.
+lengths_sorted['date'] = pd.to_datetime(lengths_sorted[['year', 'month', 'day']])
+
+#Group the data by each day and compute the mean article length for that day to condense multiple articles per day into a single representative value.
+daily_avg = lengths_sorted.groupby('date')['length'].mean().reset_index(name='avg_length')
+
+#Generate a line plot showing how average article length varies day by day.
+#`markers=True` adds visible dots at each data point for better readability.
 fig_line_daily = px.line(
-    lengths_sorted,
-    x='month',        # Using 'month' for time progression within each year
-    y='length',       # Individual article lengths
-    color='year',     # Differentiate years by color to show trends across years
-    title="Line Plot of Individual Article Lengths by Month and Year",
-    markers=True,     # Show markers for each data point
-    labels={'length': 'Article Length (tokens)', 'month': 'Month', 'year': 'Year'}
+    daily_avg,
+    x='date',
+    y='avg_length',
+    markers=True,
+    title="Daily Average Article Length",
+    labels={'avg_length': 'Average Length (tokens)', 'date': 'Date'},
+    template='plotly_dark'  #Use a dark background theme for visual contrast
 )
 
-#Update x-axis ticks to show all months clearly (1 to 12)
-fig_line_daily.update_xaxes(
-    tickvals=list(range(1, 13)),
-    ticks="inside",
-    tickwidth=2,
-    minor_ticks="inside",
-    minor_tickwidth=2
-)
-
-#Consistent y-axis styling with other plots
-fig_line_daily.update_yaxes(
-    ticks="outside",
-    tickwidth=2,
-    minor_ticks="outside",
-    minor_tickwidth=2
-)
-
+# Display the chart
 fig_line_daily.show()
 
 
-#Line chart of yearly average article length (already provided)
+#Yearly average lengths 
+
+
+#Create a line graph showing average article lengths per year to summarize annual trends and helps identify long-term patterns.
 fig_line_year = px.line(
     length_year_sorted,
     x='year',
     y='length-mean',
-    title="Line Plot of Yearly Average Article Lengths",
     markers=True,
-    labels={'length-mean': 'Average Length (tokens)'}
+    title="Yearly Average Article Length",
+    labels={'length-mean': 'Average Length (tokens)', 'year': 'Year'},
+    template='plotly_dark'
 )
+
+#Show the line chart for yearly averages
 fig_line_year.show()
 
 
-# 3. Line chart of monthly average article length by year (already provided)
+#Monthly Avergae article lengths over time 
+
+
+#Construct a 'year-month' string column in "YYYY-MM" format to use as x-axis values which enables plotting data points in correct monthly chronological order.
+length_year_month_sorted['year_month'] = (
+    length_year_month_sorted['year'].astype(str) + '-' +
+    length_year_month_sorted['month'].astype(str).str.zfill(2)  #Ensures two-digit month format(e.g., 03 not 3)
+)
+
+#Create a line plot showing how monthly average lengths change over time.
+#Useful for detecting seasonal or short-term variation.
 fig_line_month = px.line(
     length_year_month_sorted,
-    x='month',
+    x='year_month',
     y='length-mean',
-    color='year',
-    title="Line Plot of Monthly Average Article Lengths by Year",
     markers=True,
-    labels={'length-mean': 'Average Length (tokens)', 'month': 'Month'}
+    title="Monthly Average Article Length Over Time",
+    labels={'length-mean': 'Average Length (tokens)', 'year_month': 'Month'},
+    template='plotly_dark'
 )
 
-#X-axis and Y-axis styling to maintain consistent appearance
-fig_line_month.update_xaxes(
-    tickvals=list(range(1, 13)),
-    ticks="inside",
-    tickwidth=2,
-    minor_ticks="inside",
-    minor_tickwidth=2
-)
+#Rotate x-axis tick labels for better readability, especially for long month sequences.
+fig_line_month.update_layout(xaxis_tickangle=-45)
 
-fig_line_month.update_yaxes(
-    ticks="outside",
-    tickwidth=2,
-    minor_ticks="outside",
-    minor_tickwidth=2
-)
-
+#Display the monthly line chart
 fig_line_month.show()
 
-# Tree map Graphs
+
+
+##Tree map Graphs
+
 #Taken from collab cheet sheets : plotly_cheatsheet_6_2.ipynb
 
-#Daily Article Lengths Treemap (using lengths_sorted)
+#Daily Article lengths treemap
+#Create a treemap showing the distribution of article lengths for each day folling this format Year, Month, Day
 fig_daily_treemap = px.treemap(
     lengths_sorted,
-    path=[px.Constant("All Articles"), 'year', 'month', 'day'],  # Hierarchy: Year > Month > Day
-    values='length',  # Size represents article length
-    color='length',  # Color intensity represents length
-    color_continuous_scale='Viridis',  # Color scale for length representation
-    title='Article Length Distribution by Year and Month (Daily Data)'
+    path=[px.Constant("All Articles"), 'year', 'month', 'day'],  #Define format for visualization
+    values='length',                  #Size of each box corresponds to the length of individual articles
+    color='length',                  #Color intensity reflects the length, helping spot longer/shorter articles visually
+    color_continuous_scale='Viridis', #To make the graph visually appealing and interactive #Taken from ChatGpt Conversation 4 
+    title='Article Length Distribution by Year and Month (Daily Data)'  #chart title
 )
 
+#Apply a dark theme for better contrast and modern look
 fig_daily_treemap.update_layout(template='plotly_dark')
+
+#Display the graph 
 fig_daily_treemap.show()
 
-#Yearly Aggregated Lengths Treemap (using length_year_sorted)
+
+#Yearly Aggregated article lengths treemap 
+
+#Create a treemap showing total article lengths per year to help visualize which years had more article content overall
 fig_yearly_treemap = px.treemap(
     length_year_sorted,
-    path=[px.Constant("Yearly Totals"), 'year'],  # Hierarchy: Year level
-    values='length-sum',  # Size represents total yearly length
-    color='length-mean',  # Color represents average article length
-    color_continuous_scale='Reds',  # Different color scale for distinction
-    title='Total Article Length by Year'
+    path=[px.Constant("Yearly Totals"), 'year'],  #Simple hierarchy with just years under a root label
+    values='length-sum',             #Size of each block corresponds to total article length for that year
+    color='length-mean',             #Use average length as color metric to reveal writing trends within the year
+    color_continuous_scale='Reds',   #Use 'Reds' to visually distinguish this chart from others
+    title='Total Article Length by Year' 
 )
+
+#Apply the dark theme to match visual consistency across plots
 fig_yearly_treemap.update_layout(template='plotly_dark')
+
+#Show the yearly treemap
 fig_yearly_treemap.show()
 
-# 3. Monthly Aggregated Lengths Treemap (using length_year_month_sorted)
-fig_monthly_treemap = px.treemap(
-    length_year_month_sorted,
-    path=[px.Constant("Monthly Data"), 'year', 'month'],  # Hierarchy: Year > Month
-    values='length-sum',  # Size represents total monthly length
-    color='length-mean',  # Color represents monthly average
-    color_continuous_scale='Greens',  # Distinct color scheme
-    title='Article Length Distribution by Year and Month'
+
+#Monthly Aggregated article lengths treemap 
+
+# Create a treemap to show how article lengths change each month over the years which helps us see which months had more or less news coverage
+fig_monthly_treemap = px.treemap(length_year_month_sorted,
+    path=[px.Constant("Monthly Data"), 'year', 'month'],  #year and month format 
+    values='length-sum',             #Block size represents total article length in each month
+    color='length-mean',             #Color reflects average article length for that month (writing style/tone)
+    color_continuous_scale='Greens', #Use 'Greens' to visually distinguish this from daily/yearly plots
+    title='Article Length Distribution by Year and Month' 
 )
 
+#Apply dark mode for better readability 
 fig_monthly_treemap.update_layout(template='plotly_dark')
+
+#Show the monthly treemap
 fig_monthly_treemap.show()
