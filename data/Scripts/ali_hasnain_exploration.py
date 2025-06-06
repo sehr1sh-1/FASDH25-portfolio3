@@ -2,15 +2,20 @@
 import os
 import pandas as pd
 import plotly.express as px
+
 #loading the csv file into a dataframe
 df = pd.read_csv(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\dataframes\tfidf\tfidf-over-0.3.csv")
+
 #print number of rows and columns
 print(df.shape)
+
 #print first and last 5 rows
 print(df.head())
 print(df.tail())
+
 #print column names
 print(df.columns)
+
 #print top 5 most common similarity values
 print(df["similarity"].value_counts().head())
 
@@ -31,6 +36,7 @@ fig.update_yaxes(title_text='Frequency(Count)')
 
 #show the histogram
 fig.show()
+
 #save to outputs folder
 fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\histogram_similarity_scores.html")
 
@@ -49,6 +55,7 @@ fig.update_xaxes(title_text='Timeperiod')
 
 #show the line chart
 fig.show()
+
 #save output
 fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\similarity_over_time.html")
 
@@ -57,5 +64,6 @@ fig = px.box(df, y="similarity", title="Boxplot of Similarity Scores")
 
 #show the boxplot
 fig.show()
+
 #save the ouput
 fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\boxplot_similarity_scores.html")
