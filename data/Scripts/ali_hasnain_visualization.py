@@ -86,6 +86,8 @@ fig.update_layout(
 
 #show final line chart
 fig.show()
+#save the figure as an HTML file
+fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\monthly_similarity_plot.html")
 
 #filter original data to keep only rows from the peak month
 peak_articles = df[df["month"] == peak_month]

@@ -31,6 +31,8 @@ fig.update_yaxes(title_text='Frequency(Count)')
 
 #show the histogram
 fig.show()
+#save to outputs folder
+fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\histogram_similarity_scores.html")
 
 #extract date from 'filename-1' column in YYYY-MM-DD format(Chatgpt help)
 df["date"] = pd.to_datetime(df["filename-1"].str.extract(r"(\d{4}-\d{2}-\d{2})")[0])
@@ -40,12 +42,20 @@ df = df.sort_values("date")
 
 #create a line chart to show similarity over time
 fig = px.line(df, x="date", y="similarity", title="Similarity over Time")
+
+
 #setting x-axis label
 fig.update_xaxes(title_text='Timeperiod')
 
 #show the line chart
 fig.show()
+#save output
+fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\similarity_over_time.html")
+
 #creating a box plot to show spread and outliers of similarity scores
 fig = px.box(df, y="similarity", title="Boxplot of Similarity Scores")
+
 #show the boxplot
 fig.show()
+#save the ouput
+fig.write_html(r"C:\Users\aienullah.beg\Downloads\FASDH25-portfolio3\data\Outputs\boxplot_similarity_scores.html")
