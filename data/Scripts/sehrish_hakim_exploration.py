@@ -92,6 +92,7 @@ print(lengths_sorted)
 print(length_year_sorted)
 print(length_year_month_sorted)
 
+#Box Graphs 
 #Visualizes how individual article lengths are distributed across years to check variability and outliers
 #Taken from Coolab cheatsheets: https://colab.research.google.com/drive/1_7AfMdtVT8v8iLVsEdI8huW3t4jHLe1D?usp=sharing#scrollTo=378f8029
 fig_length_box = px.box(lengths_sorted,
