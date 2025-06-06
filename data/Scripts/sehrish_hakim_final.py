@@ -66,3 +66,4 @@ fig_daily_treemap.update_layout(template='plotly_dark')
 
 #Display the graph 
 fig_daily_treemap.show()
+fig_daily_treemap.write_html("../Outputs/daily_article_length_treemap.html")

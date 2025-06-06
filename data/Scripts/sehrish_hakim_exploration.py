@@ -101,16 +101,18 @@ fig_length_box = px.box(lengths_sorted,
              )
 
 #Displays the plot
-fig_length_box.show()
-fig_length.write_html("output/boxplot_article_lengths_by_day.html")
+#fig_length_box.show()
+
+#saves the graph in repository
+fig_length_box.write_html("../Outputs/boxplot_article_lengths_by_day.html")
 
 #This graph shows the average article length for each year and whether some years had more variation than others
 fig_year_box = px.box(length_year_sorted,
                       y="length-mean",
                       title="Distribution of Yearly Average Article Lengths",
                        )          
-fig_year_box.show()
-fig_year_box.write_html("output/boxplot_article_lengths_by_year.html")
+#fig_year_box.show()
+fig_year_box.write_html("../Outputs/boxplot_article_lengths_by_year.html")
 
 # This graph compares monthly averages for each year, so we can see which years had longer or shorter articles overall
 fig_monthly_box = px.box(length_year_month_sorted,
@@ -119,8 +121,8 @@ fig_monthly_box = px.box(length_year_month_sorted,
                          title="Distribution of Monthly Average Article Lengths by Year",
                          )
 
-fig_monthly_box.show()
-fig_monthly_box.write_html("output/boxplot_article_lengths_by_month.html")
+#fig_monthly_box.show()
+fig_monthly_box.write_html("../Outputs/boxplot_article_lengths_by_month.html")
 
 ##Bar Graphs
 
@@ -146,8 +148,8 @@ fig_length_bar = px.bar(
 )
 
 #Display the graph
-fig_length_bar.show()
-
+#fig_length_bar.show()
+fig_length_bar.write_html("../Outputs/number_of_articles_per_day.html")
 
 
 #Average article length per year 
@@ -164,9 +166,9 @@ fig_year_bar = px.bar(
 )
 
 
-fig_year_bar.show()
+#fig_year_bar.show()
 
-
+fig_year_bar.write_html("../Outputs/number_of_articles_per_year.html")
 
 #Monthly average article length by year 
 
@@ -182,9 +184,8 @@ fig_monthly_bar = px.bar(
     labels={'length-mean': 'Average Length (tokens)', 'month': 'Month'}
 )
 
-
-fig_monthly_bar.show()
-
+#fig_monthly_bar.show()
+fig_monthly_bar.write_html("../Outputs/number_of_articles_per_month.html")
 
 ##Scatter Plots
 
@@ -204,7 +205,8 @@ fig_scatter_daily = px.scatter(
     labels={'length': 'Article Length', 'date': 'Date'},  # Clear axis labels
     template='plotly_dark'  # Dark theme for better visual contrast
 )
-fig_scatter_daily.show()
+#fig_scatter_daily.show()
+fig_scatter_daily.write_html("../Outputs/daily_article_lengths.html")
 
 #Yearly Average Article Lengths
 
@@ -216,8 +218,8 @@ fig_scatter_yearly = px.scatter(
     labels={'length-mean': 'Average Length', 'year': 'Year'},  #Axis labels for clarity
     template='plotly_dark'  #Consistent dark styling
 )
-fig_scatter_yearly.show()
-
+#fig_scatter_yearly.show()
+fig_scatter_yearly.write_html("../Outputs/yearly_article_lengths.html")
 #Monthly Average Article Lengths
 
 fig_scatter_monthly = px.scatter(
@@ -229,9 +231,8 @@ fig_scatter_monthly = px.scatter(
     labels={'length-mean': 'Average Length', 'month': 'Month'},  #Axis labels for clarity
     template='plotly_dark'  #Maintain dark theme consistency
 )
-fig_scatter_monthly.show()
-
-
+#fig_scatter_monthly.show()
+fig_scatter_monthly.write_html("../Outputs/monthly_article_lengths.html")
 
 ##Histograms
 #Taken from slide 15: DHFAS-13.2-Plotly and Visualisation
@@ -272,7 +273,8 @@ fig_daily_hist.add_annotation(
     text="Mean length"
 )
 
-fig_daily_hist.show()
+#fig_daily_hist.show()
+fig_daily_hist.write_html("../Outputs/daily_article_length.html")
 
 
 #Yearly average article lengths (one bar per year)
@@ -301,7 +303,8 @@ fig_yearly_hist.add_annotation(
 )
 
 #Show the finalized histogram 
-fig_yearly_hist.show()
+#fig_yearly_hist.show()
+fig_yearly_hist.write_html("../Outputs/yearly_article_length.html")
 
 
 #Monthly average article lengths, colored by year
@@ -331,8 +334,8 @@ fig_monthly_hist.add_annotation(
 )
 
 #Display the final monthly histogram
-fig_monthly_hist.show()
-
+#fig_monthly_hist.show()
+fig_monthly_hist.write_html("../Outputs/monthly_article_length.html")
 
 ##Line Graphs
 #Taken from Collab Cheatsheet plotly_cheatsheet_4_1.ipynb and Slide: 15 DHFAS-13.2
@@ -360,7 +363,8 @@ fig_line_daily = px.line(
 )
 
 # Display the chart
-fig_line_daily.show()
+#fig_line_daily.show()
+fig_line_daily.write_html("../Outputs/daily_avg_article_length.html")
 
 
 #Yearly average lengths 
@@ -378,11 +382,11 @@ fig_line_year = px.line(
 )
 
 #Show the line chart for yearly averages
-fig_line_year.show()
+#fig_line_year.show()
+fig_line_year.write_html("../Outputs/yearly_avg_article_length.html")
 
 
 #Monthly Avergae article lengths over time 
-
 
 #Construct a 'year-month' string column in "YYYY-MM" format to use as x-axis values which enables plotting data points in correct monthly chronological order.
 length_year_month_sorted['year_month'] = (
@@ -406,8 +410,8 @@ fig_line_month = px.line(
 fig_line_month.update_layout(xaxis_tickangle=-45)
 
 #Display the monthly line chart
-fig_line_month.show()
-
+#fig_line_month.show()
+fig_line_month.write_html("../Outputs/monthly_avg_article_length.html")
 
 
 ##Tree map Graphs
@@ -429,7 +433,9 @@ fig_daily_treemap = px.treemap(
 fig_daily_treemap.update_layout(template='plotly_dark')
 
 #Display the graph 
-fig_daily_treemap.show()
+#fig_daily_treemap.show()
+fig_daily_treemap.write_html("../Outputs/daily_article_length_treemap.html")
+
 
 
 #Yearly Aggregated article lengths treemap 
@@ -448,7 +454,8 @@ fig_yearly_treemap = px.treemap(
 fig_yearly_treemap.update_layout(template='plotly_dark')
 
 #Show the yearly treemap
-fig_yearly_treemap.show()
+#fig_yearly_treemap.show()
+fig_yearly_treemap.write_html("../Outputs/yearly_article_length_treemap.html")
 
 
 #Monthly Aggregated article lengths treemap 
@@ -466,4 +473,5 @@ fig_monthly_treemap = px.treemap(length_year_month_sorted,
 fig_monthly_treemap.update_layout(template='plotly_dark')
 
 #Show the monthly treemap
-fig_monthly_treemap.show()
+#fig_monthly_treemap.show()
+fig_monthly_treemap.write_html("../Outputs/monthly_article_length_treemap.html")
