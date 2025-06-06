@@ -6,7 +6,7 @@ import plotly.express as px
 data_path = "/Users/mac/Downloads/FASDH25-portfolio3/data/dataframes/n-grams/2-gram/2-gram-year-month.csv"
 df = pd.read_csv(data_path)
 
-# Standardize column names
+# Standardise column names
 df.columns = df.columns.str.lower().str.strip()
 df['2-gram'] = df['2-gram'].str.lower()
 
